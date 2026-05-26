@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SICOP Master Pro v2 · TalentoCR.ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+:root{
+  --navy:#0c1b33;--navy2:#162847;--navy3:#1e3460;
+  --gold:#c9a84c;--gold2:#e8c56e;--gold-lt:rgba(201,168,76,.12);
+  --sky:#2d7dd2;--sky2:#4a9be8;--sky-lt:rgba(45,125,210,.1);
+  --rose:#e74c3c;--rose-lt:rgba(231,76,60,.1);
+  --amber:#f59e0b;--amber-lt:rgba(245,158,11,.1);
+  --sage:#27ae60;--sage-lt:rgba(39,174,96,.1);
+  --paper:#f8f9fc;--white:#fff;
+  --ink:#0c1b33;--ink2:#2c3e50;--ink3:#546e7a;
+  --line:#e4e9f0;
+  --serif:"Playfair Display",Georgia,serif;
+  --sans:"DM Sans",sans-serif;
+  --mono:"DM Mono",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6}
+
+/* LOGIN */
+.lw{display:flex;align-items:center;justify-content:center;min-height:100vh;
+  background:linear-gradient(135deg,#060e1c 0%,var(--navy) 60%,var(--navy3) 100%);position:relative;overflow:hidden}
+.lw::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at 75% 40%,rgba(201,168,76,.1),transparent 55%),
+             radial-gradient(ellipse at 20% 70%,rgba(13,148,136,.07),transparent 50%)}
+.lc{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);border-radius:24px;
+  padding:40px;width:100%;max-width:400px;backdrop-filter:blur(20px);position:relative;z-index:1;
+  animation:fu .5s ease}
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.llo{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.lico{width:48px;height:48px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:14px;display:grid;place-items:center;font-size:1.5rem;
+  box-shadow:0 4px 20px rgba(201,168,76,.35)}
+.lbrand{font-family:var(--serif);font-size:1.3rem;color:#fff}
+.lsub{font-size:.62rem;color:rgba(255,255,255,.35);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.ldiv{height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.25),transparent);margin:20px 0}
+.llbl{font-size:.65rem;font-weight:600;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:5px}
+.linp{width:100%;padding:11px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;font-size:.88rem;color:#fff;font-family:var(--sans);outline:none;transition:border-color .2s;margin-bottom:12px}
+.linp::placeholder{color:rgba(255,255,255,.22)}
+.linp:focus{border-color:rgba(201,168,76,.5);background:rgba(255,255,255,.1)}
+.lbtn{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);border:none;border-radius:10px;font-size:.9rem;font-weight:700;
+  cursor:pointer;font-family:var(--sans);transition:all .2s}
+.lbtn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,168,76,.4)}
+.lerr{color:#fca5a5;font-size:.75rem;text-align:center;margin-top:10px;min-height:18px}
+.ldemo{font-size:.64rem;color:rgba(255,255,255,.22);text-align:center;margin-top:14px}
+
+/* APP */
+.app{display:none;flex-direction:column;min-height:100vh}
+.app.on{display:flex}
+
+/* TOPBAR */
+.tb{background:var(--navy);padding:12px 28px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;flex-wrap:wrap;
+  border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;z-index:100}
+.tb-l{display:flex;align-items:center;gap:10px}
+.tb-ico{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:10px;display:grid;place-items:center;font-size:1.1rem}
+.tb-t{font-family:var(--serif);font-size:1rem;color:#fff;font-weight:600}
+.tb-s{font-size:.6rem;color:rgba(255,255,255,.35);letter-spacing:.06em;text-transform:uppercase}
+.tb-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pp{padding:4px 12px;border-radius:20px;font-size:.65rem;font-weight:700}
+.pp-free{background:rgba(255,255,255,.08);color:rgba(255,255,255,.45)}
+.pp-pro{background:rgba(45,125,210,.2);color:#60a5fa}
+.tbb{background:transparent;border:1px solid rgba(255,255,255,.18);padding:5px 13px;
+  border-radius:20px;color:rgba(255,255,255,.65);font-size:.7rem;cursor:pointer;
+  font-family:var(--sans);transition:all .15s;white-space:nowrap}
+.tbb:hover{background:rgba(255,255,255,.1);color:#fff}
+
+/* LAYOUT */
+.main{flex:1;max-width:1280px;margin:0 auto;width:100%;padding:24px}
+
+/* STEPS BAR */
+.sbar{display:flex;align-items:center;justify-content:center;margin-bottom:28px;border-bottom:1px solid var(--line)}
+.si{display:flex;align-items:center;gap:7px;padding:10px 18px;font-size:.78rem;
+  font-weight:500;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.si.on{color:var(--sky);border-bottom-color:var(--sky);font-weight:700}
+.si.done{color:var(--sage)}
+.sn{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+  font-size:.7rem;font-weight:700;background:var(--line);color:var(--ink3)}
+.si.on .sn{background:var(--sky);color:#fff}
+.si.done .sn{background:var(--sage);color:#fff}
+
+/* CARD */
+.card{background:var(--white);border-radius:16px;border:1px solid var(--line);padding:22px;margin-bottom:18px}
+.ch{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;margin-bottom:14px;color:var(--ink)}
+
+/* INSTITUTION GRID */
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.ib{padding:12px 8px;border:2px solid var(--line);border-radius:10px;background:var(--white);
+  cursor:pointer;text-align:center;transition:all .15s;font-family:var(--sans)}
+.ib:hover{border-color:var(--sky);background:var(--sky-lt)}
+.ib.on{border-color:var(--gold);background:var(--gold-lt)}
+.iico{font-size:1.3rem;display:block;margin-bottom:3px}
+.inm{font-size:.7rem;font-weight:600;color:var(--ink2)}
+.ib.on .inm{color:var(--navy)}
+.io{width:100%;padding:10px 13px;border:2px solid var(--line);border-radius:10px;
+  font-family:var(--sans);font-size:.85rem;color:var(--ink);margin-top:10px;
+  background:var(--white);outline:none;transition:border-color .2s}
+.io:focus{border-color:var(--sky)}
+
+/* DROPZONE */
+.dz{border:2px dashed var(--line);border-radius:14px;padding:32px 20px;
+  text-align:center;cursor:pointer;transition:all .2s;background:var(--paper)}
+.dz:hover,.dz.drag{border-color:var(--sky);background:var(--sky-lt)}
+.dzi{font-size:2.2rem;margin-bottom:8px}
+.dzt{color:var(--ink3);font-size:.83rem;line-height:1.8}
+.dzt strong{color:var(--sky)}
+.fc{display:none;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;
+  background:var(--sage-lt);border-radius:10px;border:1px solid rgba(39,174,96,.2)}
+.fc.on{display:flex}
+.fcn{font-size:.8rem;font-weight:600;color:var(--sage);flex:1}
+
+/* TEXTAREA */
+.ta{width:100%;min-height:180px;padding:13px;border:2px solid var(--line);
+  border-radius:10px;font-family:var(--sans);font-size:.84rem;color:var(--ink);
+  resize:vertical;outline:none;transition:border-color .2s;background:var(--white)}
+.ta:focus{border-color:var(--sky)}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:14px}
+.tab{padding:9px 16px;font-size:.76rem;font-weight:500;color:var(--ink3);
+  cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .15s;font-family:var(--sans);background:none;border-top:none;border-left:none;border-right:none}
+.tab.on{color:var(--sky);border-bottom-color:var(--sky);font-weight:700}
+
+/* BUTTONS */
+.btn{border:none;cursor:pointer;font-family:var(--sans);transition:all .2s;
+  display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.bp{background:linear-gradient(135deg,var(--sky),var(--sky2));color:#fff;
+  padding:12px 26px;border-radius:40px;font-size:.88rem;width:100%;
+  justify-content:center;margin-top:12px}
+.bp:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(45,125,210,.3)}
+.bp:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.bg{background:transparent;border:1px solid var(--line);padding:9px 18px;
+  border-radius:40px;font-size:.76rem;color:var(--ink3)}
+.bg:hover{border-color:var(--sky);color:var(--sky)}
+.bgo{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);
+  padding:10px 20px;border-radius:40px;font-size:.8rem}
+.bgo:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(201,168,76,.35)}
+
+/* LOADING */
+.ldw{display:none;text-align:center;padding:48px 24px}
+.ldw.on{display:block}
+.sp{width:42px;height:42px;border:3px solid var(--line);border-top-color:var(--sky);
+  border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ldt{color:var(--ink3);font-size:.84rem}
+.lds{font-size:.74rem;color:var(--sky);margin-top:5px;font-family:var(--mono)}
+
+/* RESULTS */
+.rw{display:none}
+.rw.on{display:block}
+
+/* FICHA */
+.fh{background:linear-gradient(135deg,var(--navy),var(--navy3));border-radius:16px;
+  padding:22px;margin-bottom:18px;color:#fff}
+.ftp{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.fi{font-size:.68rem;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.07em}
+.fo{font-family:var(--serif);font-size:1.3rem;font-weight:600;line-height:1.25;margin-top:4px}
+.fm{padding:4px 13px;border-radius:20px;font-size:.66rem;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;flex-shrink:0;margin-top:4px}
+.mg{background:rgba(45,125,210,.25);color:#93c5fd}
+.mi{background:rgba(13,148,136,.25);color:#5eead4}
+.mm{background:rgba(201,168,76,.2);color:var(--gold2)}
+.mu{background:rgba(139,92,246,.2);color:#c4b5fd}
+.ma{background:rgba(236,72,153,.2);color:#f9a8d4}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:8px;margin-top:16px}
+.fc2{background:rgba(255,255,255,.07);border-radius:8px;padding:9px 13px}
+.fl{font-size:.58rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.07em}
+.fv{font-size:.88rem;font-weight:600;margin-top:2px}
+.fva{color:#fbbf24}
+
+/* KPIs */
+.kr{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+@media(max-width:580px){.kr{grid-template-columns:repeat(2,1fr)}}
+.kp{background:var(--white);border-radius:10px;padding:14px;text-align:center;
+  border:1px solid var(--line);border-top:3px solid}
+.kp.red{border-top-color:var(--rose)}
+.kp.amb{border-top-color:var(--amber)}
+.kp.grn{border-top-color:var(--sage)}
+.kp.blu{border-top-color:var(--sky)}
+.kn{font-size:1.8rem;font-weight:700;font-family:var(--mono)}
+.kn.red{color:var(--rose)}.kn.amb{color:var(--amber)}.kn.grn{color:var(--sage)}.kn.blu{color:var(--sky)}
+.kl{font-size:.62rem;color:var(--ink3);text-transform:uppercase;margin-top:2px}
+
+/* ALERTS */
+.as{margin-bottom:18px}
+.st{font-weight:700;font-size:.82rem;margin-bottom:10px;display:flex;align-items:center;gap:5px;color:var(--ink2)}
+.ai{background:var(--white);border-radius:10px;padding:13px 16px;display:flex;
+  gap:12px;align-items:flex-start;border:1px solid var(--line);border-left:4px solid;margin-bottom:8px}
+.ai.red{border-left-color:var(--rose);background:rgba(231,76,60,.02)}
+.ai.amb{border-left-color:var(--amber);background:rgba(245,158,11,.02)}
+.ai.grn{border-left-color:var(--sage);background:rgba(39,174,96,.02)}
+.aic{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.aib{flex:1}
+.ait{font-weight:700;font-size:.83rem;margin-bottom:2px}
+.aid{font-size:.78rem;color:var(--ink3);line-height:1.55}
+.aia{font-size:.73rem;color:var(--sky);font-weight:600;margin-top:5px}
+
+/* DOCS */
+.dg{display:flex;flex-direction:column;gap:7px}
+.dr{display:flex;align-items:center;gap:10px;padding:10px 13px;
+  background:var(--paper);border-radius:10px;border:1px solid var(--line)}
+.dr:hover{border-color:var(--sky)}
+.dri{font-size:.95rem;flex-shrink:0}
+.drn{flex:1;font-size:.8rem;font-weight:500}
+.drv{font-size:.68rem;color:var(--ink3)}
+.dbg{padding:2px 9px;border-radius:7px;font-size:.63rem;font-weight:700;flex-shrink:0}
+.de{background:var(--rose-lt);color:var(--rose)}
+.ds{background:var(--sage-lt);color:var(--sage)}
+.dp{background:var(--sky-lt);color:var(--sky)}
+
+/* COSTOS */
+.ct{width:100%;border-collapse:collapse;font-size:.8rem}
+.ct th{background:var(--navy);color:rgba(255,255,255,.75);padding:9px 13px;
+  text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em}
+.ct td{padding:9px 13px;border-bottom:1px solid var(--line)}
+.ct tr:last-child td{border-bottom:none;font-weight:700;background:var(--paper)}
+.cwarn{background:rgba(231,76,60,.06);border:1px solid rgba(231,76,60,.18);
+  border-radius:8px;padding:9px 13px;font-size:.76rem;color:var(--rose);margin-top:8px}
+
+/* PLAZOS */
+.pl{display:flex;flex-direction:column;gap:7px}
+.pr{display:flex;align-items:center;gap:10px;padding:9px 13px;
+  background:var(--paper);border-radius:10px;border:1px solid var(--line)}
+.pd{font-family:var(--mono);font-size:.76rem;font-weight:600;color:var(--sky);width:110px;flex-shrink:0}
+.pe{font-size:.8rem;flex:1}
+.pb{font-size:.63rem;padding:2px 9px;border-radius:7px;font-weight:700;flex-shrink:0}
+.pu{background:var(--rose-lt);color:var(--rose)}
+.pk{background:var(--sage-lt);color:var(--sage)}
+
+/* CHECKLIST */
+.cl{display:flex;flex-direction:column;gap:7px}
+.ci{display:flex;align-items:center;gap:10px;padding:9px 13px;
+  background:var(--paper);border-radius:10px;border:1px solid var(--line);cursor:pointer}
+.ci:hover{border-color:var(--sky)}
+.cb{width:17px;height:17px;border:2px solid var(--line);border-radius:4px;
+  flex-shrink:0;display:grid;place-items:center;transition:all .15s;font-size:.7rem}
+.ci.ck .cb{background:var(--sage);border-color:var(--sage);color:#fff}
+.ct2{font-size:.8rem;flex:1}
+.ci.ck .ct2{text-decoration:line-through;color:var(--ink3)}
+.cpb{font-size:.63rem;padding:2px 9px;border-radius:7px;font-weight:700;flex-shrink:0}
+.ca{background:var(--rose-lt);color:var(--rose)}
+.cm{background:var(--amber-lt);color:var(--amber)}
+.cb2{background:var(--sage-lt);color:var(--sage)}
+
+/* ESTRATEGIA */
+.eb{background:linear-gradient(135deg,rgba(45,125,210,.06),rgba(13,148,136,.04));
+  border:1px solid rgba(45,125,210,.16);border-radius:10px;padding:16px;
+  font-size:.83rem;line-height:1.7;color:var(--ink2)}
+
+/* ACTIONS */
+.ar{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+
+/* MODALS */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:500;align-items:center;justify-content:center;padding:20px}
+.mbg.on{display:flex}
+.mb{background:var(--white);border-radius:16px;max-width:640px;
+  width:100%;max-height:85vh;overflow-y:auto;padding:22px}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.mc{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--ink3)}
+.ob{background:var(--paper);padding:16px;border-radius:10px;
+  font-family:var(--mono);font-size:.73rem;white-space:pre-wrap;line-height:1.7;
+  margin-bottom:12px;max-height:380px;overflow-y:auto}
+.aki{width:100%;padding:10px 13px;border:2px solid var(--line);border-radius:10px;
+  font-family:var(--mono);font-size:.8rem;color:var(--ink);outline:none;
+  transition:border-color .2s;margin:6px 0 12px}
+.aki:focus{border-color:var(--sky)}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--navy);color:#fff;
+  padding:11px 18px;border-radius:10px;font-size:.76rem;z-index:999;
+  transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none}
+.toast.on{transform:none;opacity:1}
+
+/* UPG */
+.ub{background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:10px;
+  padding:11px 18px;display:flex;justify-content:space-between;align-items:center;
+  gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.ut{color:var(--navy);font-weight:700;font-size:.83rem}
+.ua{background:var(--navy);color:#fff;border:none;padding:6px 16px;
+  border-radius:20px;font-weight:700;font-size:.72rem;cursor:pointer;font-family:var(--sans)}
+
+.hdn{display:none!important}
+@media(max-width:680px){.main{padding:14px}.fo{font-size:1.05rem}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="lw" class="lw">
+  <div class="lc">
+    <div class="llo">
+      <div class="lico">&#9878;</div>
+      <div><div class="lbrand">SICOP Master Pro</div><div class="lsub">TalentoCR.ai &middot; Contrataci&oacute;n P&uacute;blica</div></div>
+    </div>
+    <div class="ldiv"></div>
+    <label class="llbl">Correo</label>
+    <input class="linp" id="lEm" type="email" placeholder="usuario@empresa.com" onkeydown="if(event.key==='Enter')doLogin()">
+    <label class="llbl">Contrase&ntilde;a</label>
+    <input class="linp" id="lPw" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="lbtn" onclick="doLogin()">Ingresar &rarr;</button>
+    <div class="lerr" id="lEr"></div>
+    <div class="ldemo">Demo: demo@sicop.com / cualquier contrase&ntilde;a</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <div class="tb">
+    <div class="tb-l">
+      <div class="tb-ico">&#9878;</div>
+      <div><div class="tb-t">SICOP Master Pro</div><div class="tb-s">TalentoCR.ai</div></div>
+    </div>
+    <div class="tb-r">
+      <span id="planPill" class="pp pp-free">Gratuito</span>
+      <span id="uLbl" style="color:rgba(255,255,255,.5);font-size:.7rem"></span>
+      <button class="tbb" onclick="openAK()">&#128273; API Key</button>
+      <button class="tbb" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div id="ub" class="ub hdn">
+      <span class="ut">&#128640; Desbloqu&eacute; alertas completas y oficios listos para firmar</span>
+      <button class="ua">Ver planes &rarr;</button>
+    </div>
+
+    <!-- STEPS -->
+    <div class="sbar">
+      <div class="si on" id="s1"><div class="sn">1</div> Instituci&oacute;n</div>
+      <div class="si" id="s2"><div class="sn">2</div> Cartel</div>
+      <div class="si" id="s3"><div class="sn">3</div> Audit&oacute;ria</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="p1">
+      <div class="card">
+        <div class="ch">&#127963; &iquest;Qu&eacute; instituci&oacute;n publica la licitaci&oacute;n?</div>
+        <div class="ig" id="ig">
+          <button class="ib" data-code="CCSS" onclick="selI(this)"><span class="iico">&#127973;</span><span class="inm">CCSS</span></button>
+          <button class="ib" data-code="UCR" onclick="selI(this)"><span class="iico">&#127979;</span><span class="inm">UCR</span></button>
+          <button class="ib" data-code="TEC" onclick="selI(this)"><span class="iico">&#128300;</span><span class="inm">TEC / ITCR</span></button>
+          <button class="ib" data-code="MUNI" onclick="selI(this)"><span class="iico">&#127963;</span><span class="inm">Municipalidad</span></button>
+          <button class="ib" data-code="ICE" onclick="selI(this)"><span class="iico">&#9889;</span><span class="inm">ICE / CNFL</span></button>
+          <button class="ib" data-code="MCJ" onclick="selI(this)"><span class="iico">&#127925;</span><span class="inm">MCJ / CNM</span></button>
+          <button class="ib" data-code="PJ" onclick="selI(this)"><span class="iico">&#9878;</span><span class="inm">Poder Judicial</span></button>
+          <button class="ib" data-code="MSP" onclick="selI(this)"><span class="iico">&#128737;</span><span class="inm">MSP</span></button>
+          <button class="ib" data-code="MEP" onclick="selI(this)"><span class="iico">&#128218;</span><span class="inm">MEP</span></button>
+          <button class="ib" data-code="BCCR" onclick="selI(this)"><span class="iico">&#127981;</span><span class="inm">BCCR</span></button>
+          <button class="ib" data-code="PROMOTORA" onclick="selI(this)"><span class="iico">&#128200;</span><span class="inm">PROMOTORA</span></button>
+          <button class="ib" data-code="OTRO" onclick="selI(this)"><span class="iico">&#127970;</span><span class="inm">Otra</span></button>
+        </div>
+        <input id="iOtra" class="io hdn" placeholder="Nombre de la instituci&oacute;n..." oninput="updOtra()">
+        <button class="btn bp" id="b2" onclick="toStep(2)" disabled>Continuar &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="p2" class="hdn">
+      <div class="card">
+        <div class="ch">&#128196; Carg&aacute; el pliego de condiciones</div>
+        <div class="tabs">
+          <button class="tab on" onclick="swTab('tf',this)">&#128194; Archivo (PDF / Word)</button>
+          <button class="tab" onclick="swTab('tt',this)">&#9997; Pegar texto</button>
+        </div>
+        <div id="tf">
+          <div class="dz" id="dz" onclick="document.getElementById('fi').click()"
+            ondragover="event.preventDefault();this.classList.add('drag')"
+            ondragleave="this.classList.remove('drag')"
+            ondrop="onDrop(event)">
+            <div class="dzi">&#128194;</div>
+            <div class="dzt"><strong>Hac&eacute; clic</strong> o arrastr&aacute; el cartel<br>PDF, Word, imagen &mdash; m&aacute;x 20 MB</div>
+          </div>
+          <input type="file" id="fi" accept=".pdf,.docx,.doc,.png,.jpg,.jpeg" class="hdn" onchange="onFile(this.files[0])">
+          <div class="fc" id="fchip">
+            <span>&#128196;</span>
+            <span class="fcn" id="fchn"></span>
+            <button class="btn bg" onclick="clrFile()">&#10005;</button>
+          </div>
+        </div>
+        <div id="tt" class="hdn">
+          <textarea class="ta" id="ct" placeholder="Peg&aacute; el texto del pliego de condiciones...&#10;&#10;Puede ser el texto completo o las secciones m&aacute;s importantes." oninput="chkCan()"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn bg" onclick="toStep(1)" style="flex:1">&#8592; Volver</button>
+          <button class="btn bp" id="ba" onclick="analizar()" style="flex:2;margin-top:0" disabled>&#128269; Analizar con IA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="p3" class="hdn">
+      <div class="ldw" id="ldw">
+        <div class="sp"></div>
+        <div class="ldt">La IA est&aacute; analizando el cartel...</div>
+        <div class="lds" id="lds">Leyendo el pliego de condiciones</div>
+      </div>
+      <div class="rw" id="rw">
+        <div id="fhEl"></div>
+        <div class="kr" id="kr"></div>
+        <div class="as" id="aR" style="display:none"><div class="st">&#128308; Alertas cr&iacute;ticas &mdash; Pueden descalificarte</div><div id="lR"></div></div>
+        <div class="as" id="aA" style="display:none"><div class="st">&#128993; Advertencias</div><div id="lA"></div></div>
+        <div class="card"><div class="ch">&#128203; Documentos requeridos</div><div class="dg" id="dgEl"></div></div>
+        <div class="card"><div class="ch">&#128181; Estructura de costos</div><div id="cosEl"></div></div>
+        <div class="card"><div class="ch">&#128197; Plazos cr&iacute;ticos</div><div class="pl" id="plEl"></div></div>
+        <div class="card"><div class="ch">&#9989; Qu&eacute; ten&eacute;s que preparar</div><div class="cl" id="clEl"></div></div>
+        <div class="as" id="aV" style="display:none"><div class="st">&#128994; Recomendaciones</div><div id="lV"></div></div>
+        <div class="card"><div class="ch">&#129504; Recomendaci&oacute;n estrat&eacute;gica</div><div class="eb" id="ebEl"></div></div>
+        <div class="ar">
+          <button class="btn bgo" onclick="genOficio()">&#9994; Generar oficio de consulta</button>
+          <button class="btn bg" onclick="resetAll()">&#8592; Nuevo an&aacute;lisis</button>
+          <button class="btn bg" onclick="cpRep()">&#128203; Copiar reporte</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OFICIO MODAL -->
+<div class="mbg" id="omBg">
+  <div class="mb">
+    <div class="mh"><strong>Oficio de consulta al cartel</strong><button class="mc" onclick="clsMod('omBg')">&#10005;</button></div>
+    <div class="ldw on" id="omLd"><div class="sp"></div><div class="ldt">Redactando oficio...</div></div>
+    <div class="ob hdn" id="omTx"></div>
+    <div class="ar hdn" id="omAc">
+      <button class="btn bgo" onclick="cpOf()">&#128203; Copiar</button>
+      <button class="btn bg" onclick="clsMod('omBg')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- API KEY MODAL -->
+<div class="mbg" id="akBg">
+  <div class="mb" style="max-width:440px">
+    <div class="mh"><strong>&#128273; API Key de Anthropic</strong><button class="mc" onclick="clsMod('akBg')">&#10005;</button></div>
+    <p style="font-size:.8rem;color:var(--ink3);margin-bottom:10px">Obten&eacute; tu key en <a href="https://console.anthropic.com" target="_blank" style="color:var(--sky)">console.anthropic.com</a></p>
+    <label style="font-size:.7rem;font-weight:600;color:var(--ink3)">API Key</label>
+    <input class="aki" id="akInp" type="password" placeholder="sk-ant-api03-...">
+    <div style="display:flex;gap:8px">
+      <button class="btn bp" onclick="saveAK()" style="flex:1;margin-top:0">Guardar</button>
+      <button class="btn bg" onclick="clsMod('akBg')" style="flex:1">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// SYSTEM PROMPT v2.0
+// ============================================================
+const SYS = `# SICOP Master Pro — Agente Analizador de Carteles
+## Versión 2.0 | TalentoCR.ai
+
+---
+
+## IDENTIDAD Y MISIÓN
+
+Sos el mejor analista de licitaciones públicas de Costa Rica. Tenés dominio absoluto de la Ley General de Contratación Pública N°9986 (LGCP), el Reglamento D.E. N°43808-H vigente desde el 1° de diciembre de 2022, y las particularidades operativas de las más de 226 entidades públicas que compran a través de SICOP: 86 municipalidades, ministerios, instituciones autónomas, empresas públicas, universidades, el Poder Judicial, el ICE, la CCSS y más.
+
+Tu trabajo es automatizar lo que hace un analista experto de licitaciones: leer el cartel completo, identificar cada riesgo, construir el checklist exacto de lo que hay que presentar, y entregar un reporte que le permita al oferente preparar una oferta ganadora sin que ningún punto quede por fuera.
+
+**Principio rector:** La información institucional que conocés te guía y forma. Cada cartel es único. Analizás lo que dice ese cartel específico, usás tu conocimiento institucional para detectar lo que no dice pero aplica por ley, y alertás sobre todo lo que puede descalificar.
+
+---
+
+## PASO 0 — DETECCIÓN AUTOMÁTICA DEL TIPO DE CONTRATACIÓN
+
+Antes de cualquier análisis, identificás el tipo de procedimiento usando señales del cartel:
+
+**DETECTORES DE TIPO:**
+
+| Señal en el cartel | Tipo activado | Reglas especiales |
+|---|---|---|
+| "CONTRATACIÓN POR EXCEPCIÓN" + "ARTÍSTICO" o "INTELECTUAL" | Excepción Artística | Ver sección E |
+| "ICE", "CNFL", "RACSA" | ICE / Grupo ICE | Ver sección F |
+| "MUNICIPALIDAD", "MUNICIPIO", "CONCEJO MUNICIPAL" | Municipal | IVA 0%, timbre periodistas |
+| "UCR", "TEC", "ITCR", "UNA", "UNED", "UNIVERSIDAD" | Universitario | IVA 2% |
+| "CCSS", "CAJA COSTARRICENSE" | CCSS | IVA 13%, cargas patronales |
+| "PODER JUDICIAL", "OIJ", "CORTE SUPREMA" | PJ/OIJ | USD posible, refrendo |
+| "MSP", "MINISTERIO DE SEGURIDAD" | MSP | DAI exento, estructura rígida |
+| "MEP", "MINISTERIO DE EDUCACIÓN" | MEP | ISBN, certificación editorial |
+| "BCCR", "BANCO CENTRAL" | BCCR | Carta fabricante obligatoria |
+| "PROMOTORA" | PROMOTORA | Solo colones, exp. 3 años |
+| No detectado → | Régimen general | Reglas LGCP estándar |
+
+Si el cartel no menciona la institución explícitamente, inferís por el número de procedimiento, el encabezado, o el correo de contacto.
+
+---
+
+## MARCO LEGAL — LO QUE APLICÁS POR DEFECTO
+
+### IVA SEGÚN INSTITUCIÓN
+
+| Institución | IVA | Base |
+|---|---|---|
+| Ministerios, CCSS, instituciones autónomas generales | 13% | Ley 9635 |
+| ICE, CNFL, RACSA | 13% (colones o USD) | Ley 8660 |
+| UCR, TEC, UNA, UNED y demás universidades públicas | 2% | D.E. 41779 art. 23 inc. e |
+| Municipalidades (las 86) | 0% — exentas | Código Municipal |
+| MEP (libros físicos) | 0% | Art. 8 inc. 25, Ley 9635 |
+| MCJ artistas nacionales | 13% | Régimen general |
+| MCJ artistas extranjeros no residentes | 0% IVA + retención 15% ISR | Régimen no residentes |
+| PJ/OIJ | 0% OIJ (Ley 6826) | Verificar otros órganos PJ |
+
+**Regla crítica:** Si la oferta no desglosa los tributos, se presume que el precio total los incluye. Siempre desglosar IVA explícitamente.
+
+### RETENCIONES ISR
+
+| Supuesto | Retención | Base |
+|---|---|---|
+| Municipalidades (todos los pagos a proveedores) | 2% sobre monto bruto | Art. 23 inc. g, Ley 7092 |
+| MCJ / artistas extranjeros | 15% sobre honorarios | Régimen no residentes |
+| MSP, PROMOTORA, BCCR, TEC | 2% | Art. 23 inc. g, Ley 7092 |
+
+### PRECIO — REGLAS UNIVERSALES
+
+- Precio cierto y definitivo
+- Divergencia letras vs. números → prevalecen las letras
+- Si no declara tributos → se presumen incluidos en el precio
+- Utilidad e imprevistos: **NUNCA se reajustan** en ningún escenario, ninguna moneda
+- Mejora de precios: solo si el pliego lo permite; aportar estructura con y sin descuento; la baja no puede superar el % de utilidad declarada
+
+### PRESUPUESTO DETALLADO — REGLAS POR INSTITUCIÓN
+
+| Institución | ¿Quién presenta? | ¿Cuándo? |
+|---|---|---|
+| CCSS, UCR, Muni, MCJ, PJ, MSP, MEP, BCCR, PROMOTORA | Solo adjudicatario | 8 días hábiles post-firmeza |
+| ICE — BIENES | Solo adjudicatario | 8 días hábiles post-firmeza |
+| ICE — SERVICIOS | **Todo oferente** | Desde la oferta (Art. 26 RL8660) |
+
+### PLAZOS CLAVE SEGÚN TIPO DE LICITACIÓN
+
+| Acción | Licit. Mayor | Licit. Menor | Licit. Reducida |
+|---|---|---|---|
+| Plazo para aclaraciones | 8 días hábiles | 3 días hábiles | 1 día hábil |
+| Respuesta de la Admin | 5 días hábiles | 5 días hábiles | 1 día hábil |
+| Prevención subsanación | máx 10 días hábiles | máx 5 días hábiles | máx 3 días hábiles |
+| Plazo para subsanar | 3–10 días hábiles | 3–10 días hábiles | 3 días hábiles |
+| Recurso objeción al pliego | 8 días hábiles | 3 días hábiles | según pliego |
+| Apelación/revocatoria acto final | 8 días hábiles | 5 días hábiles | 2 días hábiles |
+
+### GARANTÍA DE CUMPLIMIENTO
+
+- Licitación Mayor y Menor: 5%–10% obligatoria
+- Licitación Reducida: facultativa; si se exige, 5%–10%
+- Si el pliego no define porcentaje → se aplica 5% supletorio
+- Se rinde electrónicamente en SICOP
+- PYME: puede usar Fodemipyme o instrumentos Ley 8634
+- Alerta: 1 día hábil antes del vencimiento sin renovar → la Administración la ejecuta preventivamente
+
+### SUBSANACIÓN — UNA SOLA PREVENCIÓN
+
+La Administración emite UNA prevención consolidada. El oferente puede aprovechar ese plazo para corregir también lo que no fue prevenido. Si no lo hace, caduca definitivamente.
+
+**Subsanables:** DJ prohibiciones, personería jurídica, CCSS/FODESAF, patentes, certificación PYME, estructura de precio omitida si no genera ventaja, documentación técnica complementaria.
+
+**No subsanables:** incumplimiento de condición invariable declarada en el pliego, defecto esencial que genera ventaja indebida, documentos que acreditan hechos que no existían antes de la apertura.
+
+### DESEMPATE
+
+1. PYME única → gana directamente
+2. Varias PYMEs: Industria/Servicios/Agropecuaria +5 pts; Comercio +2 pts
+3. Persiste empate → sorteo público con acta firmada
+
+### SUBCONTRATACIÓN
+
+Máximo 50% del monto. Declarar lista + porcentaje + certificación de titulares. La Administración puede dar puntaje adicional si el subcontratista es PYME local.
+
+---
+
+## SECCIÓN E — CONTRATACIÓN POR EXCEPCIÓN ARTÍSTICA / INTELECTUAL
+
+Se activa cuando el cartel dice "CONTRATACIÓN POR EXCEPCIÓN" + "ARTÍSTICO", "INTELECTUAL" o "SERVICIOS CULTURALES".
+
+**Diferencias críticas con licitación normal:**
+
+1. **Requisitos de admisibilidad pueden NO APLICAR** — si el cartel dice "NO APLICAN", no se exigen CCSS, Hacienda, personería, experiencia mínima.
+
+2. **Declaraciones juradas especiales** (adicionales a las estándar):
+   - Proveedor nacional o extranjero (extranjero: sumisión expresa a tribunales de CR)
+   - Seguro médico/viaje vigente durante la estadía en Costa Rica
+   - Autorización de grabaciones y transmisiones — **RENUNCIA AL COBRO POR DERECHOS DE IMAGEN**
+   - No discriminación (género, etnia, edad, orientación sexual, discapacidad, religión)
+   - No hostigamiento sexual (Ley N°7476)
+
+3. **Documentos excluyentes únicos:**
+   - "Autorización de Derechos Conexos" — firmado
+   - "Consentimiento Informado de Derechos de Imagen" — firmado
+   - Si no se adjuntan → exclusión automática
+
+4. **IVA:** Nacional 13% / Extranjero 0% IVA + retención 15% ISR sobre honorarios
+
+5. **Pagos internacionales — datos SWIFT obligatorios:**
+   - Banco Corresponsal + Código SWIFT del corresponsal
+   - Código SWIFT del Banco del Beneficiario
+   - Nombre, dirección, N° cuenta del beneficiario
+   - Ciudad y país
+   - Sin estos datos → no se puede procesar el pago
+
+6. **Plazo de oferta:** puede ser tan corto como **5 días hábiles**
+
+7. **Garantía de cumplimiento:** usualmente NO aplica
+
+8. **Subcontratación:** usualmente NO se permite (el artista debe ejecutar personalmente)
+
+9. **Multas específicas:** puntualidad en ensayos (0.5% por llegada tardía >30 min), aviso de inasistencia con mínimo 3 días
+
+10. **Estructura de costos:** MO + Insumos + GA + Utilidad (simplificada); IVA solo para nacionales
+
+---
+
+## SECCIÓN F — ICE / GRUPO ICE
+
+Se activa cuando el cartel menciona ICE, CNFL, RACSA u otro miembro del Grupo ICE.
+
+**Reglas absolutas del ICE:**
+
+1. **Reglamento propio:** Ley 8660 + Reglamento de Licitaciones ICE (RL8660) — complementa el RLGCP
+
+2. **Fórmula de precio:** Precio = U + CDPm + CIPm + CDPi + CIPi
+
+   | Componente | Descripción |
+   |---|---|
+   | CDPm | Costo Directo — Mano de Obra directa + cargas sociales completas |
+   | CIPm | Costo Indirecto — MO administrativa/supervisión |
+   | CDPi | Costo Directo — Insumos (materiales, equipos, depreciación, seguros) |
+   | CIPi | Costo Indirecto — Insumos (oficina, vehículos, edificios, costos financieros) |
+   | U | Utilidad — NUNCA se reajusta |
+
+3. **⛔ PROHIBIDO ABSOLUTO:** escribir "Varios", "otros insumos", "otros" en cualquier rubro de insumos. Cada ítem debe tener nombre específico, cantidad, costo unitario y total.
+
+4. **Cargas sociales — desglose completo obligatorio en servicios:**
+   - Seguro Enfermedad y Maternidad (CCSS)
+   - Seguro IVM — Invalidez, Vejez y Muerte (CCSS)
+   - Cuota Patronal Banco Popular
+   - Asignaciones Familiares (FODESAF)
+   - IMAS
+   - INA
+   - Ley Protección al Trabajador: Aporte Patrono BP + Fondo Capitalización Laboral + Fondo Pensiones Complementarias
+   - Reservas: Aguinaldo + Cesantía
+   - Póliza INS (% sobre salarios)
+
+5. **Presupuesto detallado:**
+   - BIENES: solo adjudicatario, 8 días hábiles
+   - SERVICIOS: **todo oferente desde la oferta** (Art. 26 RL8660) — si no lo presentás, la oferta es inadmisible
+
+6. **Política Anti-Corrupción 89.00.002.2024:** DJ explícita de compromiso ético — aplica al proveedor Y a todo el Grupo ICE
+
+7. **SySO (Salud y Seguridad Ocupacional — Norma 32.04.002.2008):**
+   - Menos de 50 personas: DJ cumplimiento + Póliza INS + CCSS + Certificación Comisión SO (si tiene 10+)
+   - 50+ personas: agregar Certificación CSO/MTSS
+   - Sin documentación SySO completa → **no hay orden de inicio** bajo ningún concepto
+
+8. **Moneda:** acepta colones (CRC) o dólares (USD) según el cartel
+
+---
+
+## SECCIÓN G — MUNICIPALIDADES (las 86)
+
+1. **IVA 0%** — exentas. Si incluís IVA, la oferta es inválida en términos económicos
+2. **Retención 2% renta** — la municipalidad retiene al pagar (Art. 23 inc. g Ley 7092). El proveedor recibe el neto. Planificar el flujo de caja
+3. **Timbre Colegio de Periodistas:** si el objeto incluye publicidad, diseño gráfico, material impreso, medios digitales o producción audiovisual → el timbre debe incluirse desglosado en la oferta económica. Sin él → oferta incompleta para el análisis económico
+4. **Declaración anticorrupción** (Art. 24 inciso c RLGCP): es obligatoria en municipalidades. Muchos oferentes la omiten porque es relativamente nueva
+5. **Patente municipal:** no es excluyente en apertura (CGR R-DCP-SICOP-00305-2025) pero debe regularizarse para la ejecución
+6. **Estructura de costos:** MO + Insumos + GA + Subcontratos + Imprevistos + Utilidad (0% IVA)
+7. **Consorcio:** permitido en la mayoría; acuerdo consorcial protocolizado
+8. **Visita al sitio:** verificar si es obligatoria y si genera condición de admisibilidad
+
+---
+
+## SECCIÓN H — CHECKLIST DOCUMENTAL UNIVERSAL
+
+### Pre-oferta (verificar con anticipación)
+
+- [ ] Registro SICOP actualizado (si pasaron >24 meses: actualizar)
+- [ ] Beneficiarios finales en SICOP (no se adjuntan, deben estar registrados)
+- [ ] DJ prohibiciones actualizada en SICOP
+- [ ] CCSS al día (verificación de oficio)
+- [ ] FODESAF al día (verificación de oficio)
+- [ ] Hacienda/Tributación al día (verificación de oficio)
+- [ ] Patente municipal vigente con objeto correcto
+- [ ] Firma digital vigente y validada en Central Directo BCCR
+
+### Con la oferta
+
+- [ ] Personería jurídica vigente (máx 1 mes si hay notario)
+- [ ] Oferta económica: precio en números Y en letras coincidentes
+- [ ] IVA desglosado explícitamente
+- [ ] Estructura de costos en el formato exacto del cartel
+- [ ] Valores absolutos Y porcentuales concordantes
+- [ ] Utilidad e imprevistos excluidos del mecanismo de reajuste
+- [ ] Lista de subcontratistas si aplica (máx 50%)
+- [ ] Especificaciones técnicas completas
+- [ ] Vigencia de la oferta no inferior a la requerida
+- [ ] Todos los documentos en español
+- [ ] Póliza Riesgos del Trabajo vigente (si el cartel la pide)
+
+### Post-adjudicación
+
+- [ ] Presupuesto detallado: 8 días hábiles post-firmeza (ICE servicios: desde la oferta)
+- [ ] Garantía de cumplimiento: gestionar inmediatamente
+- [ ] Factura electrónica: XML + PDF + aceptación Hacienda
+
+---
+
+## FORMATO DE RESPUESTA — OBLIGATORIO
+
+Respondés SIEMPRE en el siguiente formato con secciones marcadas. Nunca en prosa libre. Nunca omitas una sección aunque el cartel no tenga información — en ese caso indicás "No especificado en el cartel".
+
+\`\`\`
+##FICHA##
+tipo_procedimiento: [Licitación Mayor/Menor/Reducida/Contratación Directa/Excepción Artística/otro]
+institucion: [nombre]
+numero_expediente: [número]
+objeto: [descripción del objeto]
+presupuesto: [monto estimado]
+apertura: [fecha y hora]
+vigencia_oferta: [días hábiles]
+limite_aclaraciones: [fecha]
+limite_objecion: [fecha]
+plazo_ejecucion: [tiempo]
+iva: [porcentaje y base legal]
+moneda: [CRC/USD/otro]
+garantia: [porcentaje, vigencia, tipo]
+modo_especial: [ARTÍSTICO/ICE/MUNICIPAL/UNIVERSITARIO/GENERAL]
+##/FICHA##
+
+##ALERTAS##
+[Para cada alerta usar este formato:]
+ROJA|[título]|[descripción detallada de qué puede pasar si no se atiende]|[acción concreta a tomar]
+AMARILLA|[título]|[descripción]|[acción]
+VERDE|[título]|[descripción]|[recomendación]
+##/ALERTAS##
+
+##DOCUMENTOS##
+[Para cada documento:]
+EXCLUYENTE|[nombre del documento]|[vigencia requerida]|[nota adicional]
+SUBSANABLE|[nombre del documento]|[vigencia requerida]|[nota adicional]
+POST_ADJ|[nombre del documento]|[plazo]|[nota adicional]
+##/DOCUMENTOS##
+
+##COSTOS##
+modelo: [ICE/MUNICIPAL/UNIVERSITARIO/ESTANDAR/ARTISTICO]
+[tabla de estructura exacta que pide el cartel]
+iva_porcentaje: [número]
+presupuesto_detallado_desde: [OFERTA/ADJUDICACION]
+prohibido: [si hay algo prohibido, ej: "Varios, otros insumos, otros" en ICE]
+##/COSTOS##
+
+##PLAZOS##
+[fecha]|[evento]|[días restantes o nota]
+##/PLAZOS##
+
+##CHECKLIST##
+ALTA|[ítem]
+MEDIA|[ítem]
+BAJA|[ítem]
+##/CHECKLIST##
+
+##ESTRATEGIA##
+[Párrafo de 3-5 oraciones con: ¿vale la pena presentarse?, riesgos principales, ventajas competitivas, puntos de atención críticos]
+##/ESTRATEGIA##
+\`\`\`
+
+---
+
+## INSTRUCCIONES FINALES
+
+1. **Leés el cartel completo** antes de responder. No hacés suposiciones que no estén respaldadas por el cartel o por la ley.
+
+2. **Si el cartel no dice algo pero la ley lo exige**, lo incluís como alerta amarilla con la base legal.
+
+3. **Si detectás una contradicción** entre el cartel y la ley, lo señalás como alerta roja.
+
+4. **Prioridad de alertas rojas** (van siempre primero):
+   - Documentos excluyentes faltantes
+   - IVA mal aplicado
+   - Precio fuera de bandas de tolerancia
+   - "Varios" en ICE
+   - Retención 15% ISR artistas extranjeros
+   - Timbre periodistas faltante en municipal con publicidad
+   - Presupuesto detallado desde oferta en servicios ICE
+   - Declaración anticorrupción faltante en municipalidades
+   - Documentos de derechos de imagen faltantes en artístico
+
+5. **Nunca subestimés un cartel de municipalidad** porque parece simple. Las 86 municipalidades tienen particularidades propias — algunas piden requisitos adicionales que otras no.
+
+6. **Cada cartel nuevo es una oportunidad de aprender.** Si detectás un requisito o condición que no está en tu base de conocimiento, lo documentás en la sección ESTRATEGIA.
+
+7. **Respondés en español costarricense.** Sin tecnicismos innecesarios. El analista que lee tu reporte debe poder actuar inmediatamente.
+
+---
+
+*Agente SICOP Master Pro v2.0 — TalentoCR.ai*
+*Base legal: LGCP 9986 + Reglamento D.E. 43808-H + RL8660 ICE + Normativas institucionales acumuladas*
+*Cobertura: 226+ instituciones SICOP — 86 municipalidades + ministerios + autónomas + empresas públicas + universidades + PJ + ICE + CCSS*
+`;
+
+// ============================================================
+// STATE
+// ============================================================
+var S = { user:null, inst:null, instName:'', fileText:null, fileName:null, fileB64:null, fileType:null, analysis:null, tab:'tf' };
+
+// ============================================================
+// LOGIN
+// ============================================================
+function doLogin() {
+  var em = document.getElementById('lEm').value.trim();
+  var pw = document.getElementById('lPw').value.trim();
+  var er = document.getElementById('lEr');
+  if (!em) { er.textContent = 'Ingresá tu correo.'; return; }
+  if (!pw) { er.textContent = 'Ingresá tu contraseña.'; return; }
+  S.user = { email: em, plan: 'free' };
+  localStorage.setItem('smp_u', JSON.stringify(S.user));
+  showApp();
+}
+
+function showApp() {
+  document.getElementById('lw').style.display = 'none';
+  document.getElementById('app').classList.add('on');
+  document.getElementById('uLbl').textContent = S.user.email;
+  if (!getAK()) { showToast('Configurá tu API Key para usar la IA'); setTimeout(openAK, 1400); }
+}
+
+function doLogout() { localStorage.removeItem('smp_u'); location.reload(); }
+
+// ============================================================
+// API KEY
+// ============================================================
+function getAK() { return localStorage.getItem('smp_ak') || ''; }
+function openAK() { document.getElementById('akInp').value = getAK(); document.getElementById('akBg').classList.add('on'); }
+function saveAK() {
+  var k = document.getElementById('akInp').value.trim();
+  if (!k) { showToast('Ingresá una API Key válida'); return; }
+  localStorage.setItem('smp_ak', k);
+  clsMod('akBg');
+  showToast('API Key guardada ✓');
+}
+
+// ============================================================
+// STEPS
+// ============================================================
+function toStep(n) {
+  ['s1','s2','s3'].forEach((id,i) => {
+    var el = document.getElementById(id);
+    el.classList.remove('on','done');
+    if (i+1===n) el.classList.add('on');
+    if (i+1<n) el.classList.add('done');
+  });
+  ['p1','p2','p3'].forEach((id,i) => {
+    document.getElementById(id).classList.toggle('hdn', i+1!==n);
+  });
+}
+
+// ============================================================
+// INSTITUTION
+// ============================================================
+function selI(btn) {
+  document.querySelectorAll('.ib').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  var code = btn.dataset.code;
+  S.inst = code;
+  S.instName = code;
+  var otr = document.getElementById('iOtra');
+  if (code === 'OTRO') { otr.classList.remove('hdn'); otr.focus(); }
+  else { otr.classList.add('hdn'); document.getElementById('b2').disabled = false; }
+}
+
+function updOtra() {
+  var v = document.getElementById('iOtra').value.trim();
+  S.instName = v || 'OTRO';
+  document.getElementById('b2').disabled = !v;
+}
+
+// ============================================================
+// TABS
+// ============================================================
+function swTab(id, btn) {
+  ['tf','tt'].forEach(t => document.getElementById(t).classList.toggle('hdn', t!==id));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  S.tab = id;
+  chkCan();
+}
+
+// ============================================================
+// FILE HANDLING
+// ============================================================
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('dz').classList.remove('drag');
+  if (e.dataTransfer.files[0]) onFile(e.dataTransfer.files[0]);
+}
+
+async function onFile(f) {
+  if (!f) return;
+  if (f.size > 20*1024*1024) { showToast('Archivo muy grande (máx 20 MB)'); return; }
+  S.fileName = f.name;
+  document.getElementById('fchn').textContent = f.name;
+  document.getElementById('fchip').classList.add('on');
+  showToast('Leyendo archivo...');
+  try {
+    if (f.type==='application/pdf' || f.name.endsWith('.pdf')) {
+      S.fileText = await rdPDF(f);
+    } else if (f.name.endsWith('.docx') || f.name.endsWith('.doc')) {
+      S.fileText = await rdDocx(f);
+    } else if (f.type.startsWith('image/')) {
+      S.fileB64 = await toB64(f); S.fileType = f.type; S.fileText = '[IMAGEN]';
+    }
+    showToast('Listo ✓'); chkCan();
+  } catch(e) { showToast('Error: ' + e.message); }
+}
+
+async function rdPDF(f) {
+  var ab = await f.arrayBuffer();
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  var pdf = await pdfjsLib.getDocument({data:ab}).promise;
+  var out = [];
+  for (var i=1; i<=Math.min(pdf.numPages,60); i++) {
+    var pg = await pdf.getPage(i);
+    var tc = await pg.getTextContent();
+    out.push(tc.items.map(it=>it.str).join(' '));
+  }
+  return out.join('\n');
+}
+
+async function rdDocx(f) {
+  var ab = await f.arrayBuffer();
+  var r = await mammoth.extractRawText({arrayBuffer:ab});
+  return r.value;
+}
+
+function toB64(f) {
+  return new Promise((res,rej) => {
+    var r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(f);
+  });
+}
+
+function clrFile() {
+  S.fileText = S.fileName = S.fileB64 = S.fileType = null;
+  document.getElementById('fchip').classList.remove('on');
+  document.getElementById('fi').value = '';
+  chkCan();
+}
+
+function chkCan() {
+  var ok = S.tab==='tf' ? !!S.fileText : document.getElementById('ct').value.trim().length > 50;
+  document.getElementById('ba').disabled = !ok;
+}
+
+// ============================================================
+// ANALYZE
+// ============================================================
+async function analizar() {
+  var key = getAK();
+  if (!key) { openAK(); return; }
+  toStep(3);
+  document.getElementById('ldw').classList.add('on');
+  document.getElementById('rw').classList.remove('on');
+
+  var steps = [
+    'Detectando tipo de procedimiento...',
+    'Identificando inst\u00f3n y r\u00e9gimen fiscal...',
+    'Analizando documentos excluyentes...',
+    'Revisando estructura de costos...',
+    'Construyendo checklist de alertas...',
+    'Generando recomendaci\u00f3n estrat\u00e9gica...'
+  ];
+  var si = 0;
+  var sEl = document.getElementById('lds');
+  var stI = setInterval(() => { sEl.textContent = steps[si=(si+1)%steps.length]; }, 2800);
+
+  try {
+    var content = S.tab==='tt' ? document.getElementById('ct').value.trim() : (S.fileText||'');
+    var msgs;
+
+    if (S.fileB64 && S.fileType) {
+      msgs = [{ role:'user', content:[
+        { type:'image', source:{ type:'base64', media_type:S.fileType, data:S.fileB64 }},
+        { type:'text', text:'INSTITUCIÓN: '+S.instName+'\n\nAnalizá este cartel.' }
+      ]}];
+    } else {
+      msgs = [{ role:'user', content:'INSTITUCIÓN SELECCIONADA: '+S.instName+'\n\nCONTENIDO DEL CARTEL:\n'+content.substring(0,60000) }];
+    }
+
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:4096, system:SYS, messages:msgs })
+    });
+
+    clearInterval(stI);
+
+    if (!resp.ok) {
+      var ed = await resp.json();
+      throw new Error(ed.error?.message || 'Error '+resp.status);
+    }
+
+    var data = await resp.json();
+    S.analysis = data.content[0].text;
+    renderR(S.analysis);
+
+  } catch(e) {
+    clearInterval(stI);
+    document.getElementById('ldw').classList.remove('on');
+    showToast('Error: ' + e.message);
+    toStep(2);
+  }
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function sec(raw, name) {
+  var m = raw.match(new RegExp('##'+name+'##([\\s\\S]*?)##/'+name+'##','i'));
+  return m ? m[1].trim() : '';
+}
+
+function fld(txt, f) {
+  var m = txt.match(new RegExp(f+'\\s*:\\s*(.+)','i'));
+  return m ? m[1].trim() : 'No especificado';
+}
+
+function renderR(raw) {
+  document.getElementById('ldw').classList.remove('on');
+  document.getElementById('rw').classList.add('on');
+  var fi = sec(raw,'FICHA'), al = sec(raw,'ALERTAS'), dc = sec(raw,'DOCUMENTOS');
+  var co = sec(raw,'COSTOS'), pl = sec(raw,'PLAZOS'), cl = sec(raw,'CHECKLIST');
+  var es = sec(raw,'ESTRATEGIA');
+  rendFicha(fi); rendAlertas(al); rendDocs(dc);
+  rendCostos(co); rendPlazos(pl); rendChk(cl); rendEst(es);
+}
+
+function rendFicha(t) {
+  var tipo=fld(t,'tipo_procedimiento'), inst=fld(t,'institucion');
+  var obj=fld(t,'objeto'), ppto=fld(t,'presupuesto');
+  var ap=fld(t,'apertura'), vig=fld(t,'vigencia_oferta');
+  var iva=fld(t,'iva'), mon=fld(t,'moneda'), gar=fld(t,'garantia');
+  var modo=fld(t,'modo_especial').toUpperCase();
+  var mc={'ICE':'mi','MUNICIPAL':'mm','UNIVERSITARIO':'mu','ARTISTICO':'ma','ARTÍSTICO':'ma'}[modo]||'mg';
+  document.getElementById('fhEl').innerHTML=`<div class="fh">
+    <div class="ftp"><div><div class="fi">${inst} &bull; ${tipo}</div><div class="fo">${obj}</div></div>
+    <div class="fm ${mc}">${modo||'GENERAL'}</div></div>
+    <div class="fg">
+      <div class="fc2"><div class="fl">Presupuesto</div><div class="fv fva">${ppto}</div></div>
+      <div class="fc2"><div class="fl">Apertura</div><div class="fv">${ap}</div></div>
+      <div class="fc2"><div class="fl">Vigencia oferta</div><div class="fv">${vig}</div></div>
+      <div class="fc2"><div class="fl">IVA</div><div class="fv">${iva}</div></div>
+      <div class="fc2"><div class="fl">Moneda</div><div class="fv">${mon}</div></div>
+      <div class="fc2"><div class="fl">Garant&iacute;a</div><div class="fv">${gar}</div></div>
+    </div></div>`;
+}
+
+function rendAlertas(t) {
+  var ro=[],am=[],ve=[];
+  t.split('\n').forEach(l => {
+    l=l.trim(); if(!l) return;
+    var p=l.split('|'); if(p.length<3) return;
+    var tp=p[0].trim().toUpperCase(), ti=p[1]?.trim()||'', de=p[2]?.trim()||'', ac=p[3]?.trim()||'';
+    var obj={ti,de,ac};
+    if(tp==='ROJA') ro.push(obj);
+    else if(tp==='AMARILLA') am.push(obj);
+    else if(tp==='VERDE') ve.push(obj);
+  });
+
+  document.getElementById('kr').innerHTML=`
+    <div class="kp red"><div class="kn red">${ro.length}</div><div class="kl">Alertas cr&iacute;ticas</div></div>
+    <div class="kp amb"><div class="kn amb">${am.length}</div><div class="kl">Advertencias</div></div>
+    <div class="kp grn"><div class="kn grn">${ve.length}</div><div class="kl">Recomendaciones</div></div>
+    <div class="kp blu"><div class="kn blu">${ro.length===0?'&#10003;':'!'}</div><div class="kl">Estado</div></div>`;
+
+  function bld(arr,cls,ico) {
+    return arr.map(a=>`<div class="ai ${cls}">
+      <div class="aic">${ico}</div>
+      <div class="aib"><div class="ait">${a.ti}</div><div class="aid">${a.de}</div>
+      ${a.ac?`<div class="aia">&rarr; ${a.ac}</div>`:''}</div></div>`).join('');
+  }
+  if(ro.length){document.getElementById('aR').style.display='block';document.getElementById('lR').innerHTML=bld(ro,'red','&#128308;');}
+  if(am.length){document.getElementById('aA').style.display='block';document.getElementById('lA').innerHTML=bld(am,'amb','&#128993;');}
+  if(ve.length){document.getElementById('aV').style.display='block';document.getElementById('lV').innerHTML=bld(ve,'grn','&#128994;');}
+}
+
+function rendDocs(t) {
+  var rows='';
+  t.split('\n').forEach(l => {
+    l=l.trim(); if(!l) return;
+    var p=l.split('|'); if(p.length<2) return;
+    var tp=p[0].trim().toUpperCase(), nm=p[1]?.trim()||'', vg=p[2]?.trim()||'', nt=p[3]?.trim()||'';
+    var ico=tp==='EXCLUYENTE'?'&#10060;':tp==='SUBSANABLE'?'&#128205;':'&#128203;';
+    var bc=tp==='EXCLUYENTE'?'de':tp==='SUBSANABLE'?'ds':'dp';
+    var bt=tp==='EXCLUYENTE'?'EXCLUYENTE':tp==='SUBSANABLE'?'SUBSANABLE':'POST-ADJ';
+    rows+=`<div class="dr"><div class="dri">${ico}</div>
+      <div class="drn">${nm}${nt?` <span style="color:var(--ink3);font-size:.7rem">&mdash; ${nt}</span>`:''}</div>
+      ${vg?`<div class="drv">${vg}</div>`:''}
+      <div class="dbg ${bc}">${bt}</div></div>`;
+  });
+  document.getElementById('dgEl').innerHTML=rows||'<p style="color:var(--ink3);font-size:.8rem">Sin requisitos adicionales identificados.</p>';
+}
+
+function rendCostos(t) {
+  var mod=fld(t,'modelo'), ivp=fld(t,'iva_porcentaje');
+  var des=fld(t,'presupuesto_detallado_desde'), prh=fld(t,'prohibido');
+  var lines=t.split('\n').filter(l=>{
+    var x=l.trim();
+    return x && !x.match(/^modelo:/i) && !x.match(/^iva_porcentaje:/i)
+              && !x.match(/^presupuesto_detallado_desde:/i) && !x.match(/^prohibido:/i);
+  });
+  var tr=lines.map(l=>{
+    var p=l.split('|');
+    return p.length>=2
+      ?`<tr><td>${p[0].trim()}</td><td>${p[1]?.trim()||''}</td><td>${p[2]?.trim()||''}</td></tr>`
+      :`<tr><td colspan="3" style="color:var(--ink3)">${l.trim()}</td></tr>`;
+  }).join('');
+  var html=`<div style="font-size:.76rem;color:var(--ink3);margin-bottom:10px">
+    <strong>Modelo:</strong> ${mod} &nbsp;|&nbsp; <strong>IVA:</strong> ${ivp}% &nbsp;|&nbsp;
+    <strong>Ppto. detallado:</strong> desde ${des}</div>`;
+  if(tr) html+=`<table class="ct"><thead><tr><th>Componente</th><th>Valor</th><th>%</th></tr></thead><tbody>${tr}</tbody></table>`;
+  if(prh&&prh!=='No especificado') html+=`<div class="cwarn">&#9940; Prohibido: ${prh}</div>`;
+  document.getElementById('cosEl').innerHTML=html;
+}
+
+function rendPlazos(t) {
+  var rows='';
+  t.split('\n').forEach(l=>{
+    l=l.trim(); if(!l) return;
+    var p=l.split('|'); if(p.length<2) return;
+    var fe=p[0]?.trim()||'', ev=p[1]?.trim()||'', nt=p[2]?.trim()||'';
+    var urg=nt.toLowerCase().includes('urgente')||nt.toLowerCase().includes('crítico');
+    rows+=`<div class="pr"><div class="pd">${fe}</div><div class="pe">${ev}</div>
+      ${nt?`<div class="pb ${urg?'pu':'pk'}">${nt}</div>`:''}</div>`;
+  });
+  document.getElementById('plEl').innerHTML=rows||'<p style="color:var(--ink3);font-size:.8rem">Verificar plazos en SICOP.</p>';
+}
+
+function rendChk(t) {
+  var items='';
+  t.split('\n').forEach(l=>{
+    l=l.trim(); if(!l) return;
+    var p=l.split('|'); if(p.length<2) return;
+    var pr=p[0].trim().toUpperCase(), tx=p[1]?.trim()||'';
+    var pc=pr==='ALTA'?'ca':pr==='MEDIA'?'cm':'cb2';
+    var pt=pr==='ALTA'?'&#128308; ALTA':pr==='MEDIA'?'&#128993; MEDIA':'&#128994; BAJA';
+    items+=`<div class="ci" onclick="tglChk(this)">
+      <div class="cb">&#10003;</div>
+      <div class="ct2">${tx}</div>
+      <div class="cpb ${pc}">${pt}</div></div>`;
+  });
+  document.getElementById('clEl').innerHTML=items||'<p style="color:var(--ink3);font-size:.8rem">Revisá el análisis completo.</p>';
+}
+
+function rendEst(t) {
+  document.getElementById('ebEl').innerHTML=t.replace(/\n/g,'<br>')||'Ver análisis completo.';
+}
+
+function tglChk(el) { el.classList.toggle('ck'); }
+
+// ============================================================
+// GENERAR OFICIO
+// ============================================================
+async function genOficio() {
+  var key=getAK(); if(!key){openAK();return;}
+  document.getElementById('omBg').classList.add('on');
+  document.getElementById('omLd').classList.add('on');
+  document.getElementById('omTx').classList.add('hdn');
+  document.getElementById('omAc').classList.add('hdn');
+  try {
+    var ctx=S.analysis?'Análisis realizado:\n'+S.analysis.substring(0,3000):'';
+    var r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,
+        system:'Experto en contratación pública costarricense. Redactás oficios formales citando artículos exactos de la LGCP 9986 y su Reglamento. Formato oficial CR: ciudad, fecha, encabezado, referencia, cuerpo con consultas numeradas, despedida, firma.',
+        messages:[{role:'user',content:ctx+'\n\nRedactá un oficio formal de CONSULTA AL CARTEL con las 3 preguntas más críticas. Citá artículos específicos del cartel y de la LGCP.'}]})
+    });
+    var d=await r.json();
+    document.getElementById('omLd').classList.remove('on');
+    document.getElementById('omTx').textContent=d.content[0].text;
+    document.getElementById('omTx').classList.remove('hdn');
+    document.getElementById('omAc').classList.remove('hdn');
+    document.getElementById('omAc').style.display='flex';
+  } catch(e) {
+    document.getElementById('omLd').classList.remove('on');
+    document.getElementById('omTx').textContent='Error: '+e.message;
+    document.getElementById('omTx').classList.remove('hdn');
+  }
+}
+
+function cpOf() { navigator.clipboard.writeText(document.getElementById('omTx').textContent).then(()=>showToast('Oficio copiado ✓')); }
+function cpRep() { navigator.clipboard.writeText(S.analysis||'').then(()=>showToast('Reporte copiado ✓')); }
+function clsMod(id) { document.getElementById(id).classList.remove('on'); }
+
+function showToast(msg) {
+  var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),3000);
+}
+
+function resetAll() {
+  S.fileText=S.fileName=S.fileB64=S.fileType=S.analysis=S.inst=null;
+  S.instName='';
+  document.getElementById('fchip').classList.remove('on');
+  document.getElementById('fi').value='';
+  document.getElementById('ct').value='';
+  document.querySelectorAll('.ib').forEach(b=>b.classList.remove('on'));
+  ['aR','aA','aV'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('b2').disabled=true;
+  document.getElementById('ba').disabled=true;
+  toStep(1);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+(function(){
+  var u=localStorage.getItem('smp_u');
+  if(u){S.user=JSON.parse(u);showApp();}
+})();
+</script>
+</body>
+</html>
