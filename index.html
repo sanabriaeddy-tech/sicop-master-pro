@@ -666,7 +666,7 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
 // CONFIG — Reemplaz\u00e1 SUPABASE_ANON_KEY con tu clave:
 // Supabase \u2192 Project Settings \u2192 API \u2192 anon public
 var SB_URL = 'https://gplzqfdwutdkrczyyshj.supabase.co';
-var SB_KEY = 'SUPABASE_ANON_KEY';
+var eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwbHpxZmR3dXRka3Jjenl5c2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NTA3NjQsImV4cCI6MjA5NTMyNjc2NH0.0ocf3EZGqgjhKKPi8NbYGQSsoFNtLRcdk3Lgrb529wI = 'SUPABASE_ANON_KEY';
 var PROXY  = 'https://gplzqfdwutdkrczyyshj.supabase.co/functions/v1/claude-proxy';
 
 /* SQL para ejecutar en Supabase SQL Editor (una sola vez):
@@ -684,7 +684,7 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created after insert on auth.users for each row execute procedure handle_new_user();
 */
 
-var SB = supabase.createClient(SB_URL, SB_KEY);
+var SB = supabase.createClient(SB_URL, eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwbHpxZmR3dXRka3Jjenl5c2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NTA3NjQsImV4cCI6MjA5NTMyNjc2NH0.0ocf3EZGqgjhKKPi8NbYGQSsoFNtLRcdk3Lgrb529wI);
 
 // ===== STATE =====
 var S = {user:null,profile:null,inst:null,instName:'',fileText:null,fileName:null,analysis:null,analysisData:null,tab:'tf'};
