@@ -1,0 +1,19 @@
+{
+  "name": "LicitaCR Pro by TalentoCR.ai",
+  "short_name": "LicitaCR Pro",
+  "description": "Plataforma inteligente para contratación pública costarricense",
+  "start_url": "/sicop-master-pro/",
+  "display": "standalone",
+  "background_color": "#0c1b33",
+  "theme_color": "#0c1b33",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230c1b33'/><text x='96' y='130' font-size='100' text-anchor='middle' font-family='Georgia' fill='%23c9a84c'>⚖</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "es-CR"
+}
